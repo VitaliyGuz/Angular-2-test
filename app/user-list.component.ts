@@ -1,43 +1,57 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {User} from './user';
 import {UserDetailComponent} from './user-detail.component';
 import {UserService} from './user.service';
-/*import {OnInit} from "../node_modules/@angular/core/src/metadata/lifecycle_hooks";*/
+import {Router} from '@angular/router-deprecated';
 
 
 @Component({
-    selector: 'my-app',
+    selector: 'user-list',
     template: `
       <h1>{{title}}</h1>
       <h2>My users</h2>
-      <ul class="users">
-        <li *ngFor="let user of users"
-          [class.selected]="user === selectedUser"
-          (click)="onSelect(user)">
-          <span class="badge">{{user.id}}</span> {{user.name}}
-        </li>
-      </ul>
-      <my-user-detail [user]="selectedUser"></my-user-detail>
+      <div *ngFor="let user of users"
+        (click)="gotoDetail(user)" class="col-1-4">
+        <h4> {{user.name}} </h4>
+      </div>
+      <button class="delete-button" (click)="delete(user, $event)">Delete</button>
     `,
     directives: [UserDetailComponent],
     providers: [UserService]
 })
 
-export class AppComponent implements OnInit {
+export class UsersComponent implements OnInit {
   title = 'List of Users';
   users: User[];
   selectedUser: User;
+  error: any;
 
-  constructor (private userService: UserService) {}
+  constructor (
+    private router: Router,
+    private userService: UserService) {}
 
   getUsers() {
     this.userService.getUsers().then(users => this.users = users);
+  }
+
+  delete(user: User, event: any) {
+    event.stopPropagation();
+    this.userService
+      .delete(user)
+      .then(res => {
+        this.users = this.users.filter(h => h !== user);
+        if (this.selectedUser === user) { this.selectedUser = null; }
+      })
+      .catch(error => this.error = error); // TODO: Display error message
   }
 
   ngOnInit() {
     this.getUsers();
   }
 
-  onSelect(user: User) { this.selectedUser = user; }
+
+  gotoDetail(user: User) {
+    this.router.navigate(['UserDetail', { id: user.id }]);
+  }
 
 }
