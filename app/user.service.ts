@@ -2,23 +2,25 @@ import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { User } from './user';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/Rx';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class UserService {
-  private usersUrl = 'app/users';  // URL to web api
+  private usersUrl = 'https://rocky-citadel-19338.herokuapp.com/api/users';  // URL to web api
   constructor(private http: Http) { }
-  getUsers(): Promise<User[]> {
+  getUsers(): Observable<User[]> {
     return this.http.get(this.usersUrl)
-      .toPromise()
-      .then(response => response.json().data)
-      .catch(this.handleError);
+      .map(res => res.json());
   }
-  getUser(id: string) {
-    return this.getUsers()
-      .then(users => users.filter(user => user.id === id)[0]);
+  getUser(id: string): Observable<User> {
+    let url = `${this.usersUrl}/${id}`;
+    return this.http.get(url)
+      .map(res => res.json());
   }
-  save(user: User): Promise<User>  {
-    if (user.id) {
+  save(user: User): Observable<User>  {
+    if (user._id) {
       return this.put(user);
     }
     return this.post(user);
@@ -26,32 +28,27 @@ export class UserService {
   delete(user: User) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    let url = `${this.usersUrl}/${user.id}`;
+    let url = `${this.usersUrl}/${user._id}`;
     return this.http
       .delete(url, headers)
-      .toPromise()
-      .catch(this.handleError);
+      .map(res => res.json());
   }
   // Add new User
-  private post(user: User): Promise<User> {
+  private post(user: User): Observable<User> {
     let headers = new Headers({
       'Content-Type': 'application/json'});
     return this.http
       .post(this.usersUrl, JSON.stringify(user), {headers: headers})
-      .toPromise()
-      .then(res => res.json().data)
-      .catch(this.handleError);
+      .map(res => res.json());
   }
   // Update existing User
   private put(user: User) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    let url = `${this.usersUrl}/${user.id}`;
+    let url = `${this.usersUrl}/${user._id}`;
     return this.http
       .put(url, JSON.stringify(user), {headers: headers})
-      .toPromise()
-      .then(() => user)
-      .catch(this.handleError);
+      .map(res => res.json());
   }
   private handleError(error: any) {
     console.error('An error occurred', error);

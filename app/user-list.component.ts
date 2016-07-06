@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {Http, Jsonp} from '@angular/http';
 import {User} from './user';
 import {UserDetailComponent} from './user-detail.component';
 import {UserService} from './user.service';
@@ -6,8 +7,8 @@ import {Router} from '@angular/router-deprecated';
 
 
 @Component({
-    selector: 'user-list',
-    template: `
+  selector: 'user-list',
+  template: `
       <h1>{{title}}</h1>
       <h2>My users</h2>
       <div *ngFor="let user of users"
@@ -16,33 +17,39 @@ import {Router} from '@angular/router-deprecated';
       </div>
       <button class="delete-button" (click)="delete(user, $event)">Delete</button>
     `,
-    directives: [UserDetailComponent],
-    providers: [UserService]
+  directives: [UserDetailComponent],
+  providers: [UserService]
 })
 
 export class UsersComponent implements OnInit {
   title = 'List of Users';
-  users: User[];
-  selectedUser: User;
-  error: any;
+  users:User[];
+  selectedUser:User;
+  error:any;
 
-  constructor (
-    private router: Router,
-    private userService: UserService) {}
-
-  getUsers() {
-    this.userService.getUsers().then(users => this.users = users);
+  constructor(private router:Router,
+              private userService:UserService) {
   }
 
-  delete(user: User, event: any) {
+  getUsers() {
+    this.userService.getUsers()
+      .subscribe(
+        users => this.users = users,
+        error => console.log(error)
+      );
+  }
+
+  delete(user:User, event:any) {
     event.stopPropagation();
     this.userService
       .delete(user)
-      .then(res => {
+      .subscribe(res => {
         this.users = this.users.filter(h => h !== user);
-        if (this.selectedUser === user) { this.selectedUser = null; }
-      })
-      .catch(error => this.error = error); // TODO: Display error message
+        if (this.selectedUser === user) {
+          this.selectedUser = null;
+        }
+      }, error => console.log(error))
+
   }
 
   ngOnInit() {
@@ -50,8 +57,8 @@ export class UsersComponent implements OnInit {
   }
 
 
-  gotoDetail(user: User) {
-    this.router.navigate(['UserDetail', { id: user.id }]);
+  gotoDetail(user:User) {
+    this.router.navigate(['UserDetail', {id: user._id}]);
   }
 
 }
