@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
-import 'rxjs/add/operator/toPromise';
-import { User } from './user';
-import {Observable} from 'rxjs/Observable';
+import { User } from '../Models/user';
+import {Observable} from '../../node_modules/rxjs/Observable';
 import 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 
@@ -33,6 +32,34 @@ export class UserService {
       .delete(url, headers)
       .map(res => res.json());
   }
+
+  login(name: string, password: string) {
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    return this.http
+      .post(
+        'https://rocky-citadel-19338.herokuapp.com/api/authenticate',
+        JSON.stringify({ name, password }),
+        { headers }
+      )
+      .map(res => res.json())
+      .map((res) => {
+        if (res.success) {
+          localStorage.setItem('auth_token', res.token);
+          //this.loggedIn = true;
+        }
+
+        return res.success;
+      });
+  }
+
+  logout() {
+    localStorage.removeItem('auth_token');
+    //this.loggedIn = false;
+  }
+
+
   // Add new User
   private post(user: User): Observable<User> {
     let headers = new Headers({
@@ -49,9 +76,5 @@ export class UserService {
     return this.http
       .put(url, JSON.stringify(user), {headers: headers})
       .map(res => res.json());
-  }
-  private handleError(error: any) {
-    console.error('An error occurred', error);
-    return Promise.reject(error.message || error);
   }
 }

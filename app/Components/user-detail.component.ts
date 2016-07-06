@@ -1,22 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {User} from './user';
+import {User} from '../Models/user';
 import {RouteParams} from '@angular/router-deprecated';
-import {UserService} from './user.service';
+import {UserService} from '../Services/user.service';
+import {Router} from '@angular/router-deprecated';
 
 @Component({
   selector: 'my-user-detail',
-  template: `
-    <div *ngIf="user">
-    <h2>{{user.name}} details!</h2>
-    <div><label>id: </label>{{user._id}}</div>
-    <div>
-      <label>name: </label>
-    <input [(ngModel)]="user.name" placeholder="name"/>
-      </div>
-    </div>
-    <button (click)="goBack()">Back</button>
-    <button (click)="save()">Save</button>
-  `
+  templateUrl: 'app/Components/user-detail.component.html',
 })
 
 export class UserDetailComponent implements OnInit {
@@ -25,8 +15,9 @@ export class UserDetailComponent implements OnInit {
   error:any;
   navigated = false;
 
-  constructor(private userService:UserService,
-              private routeParams:RouteParams) {
+  constructor(private router: Router,
+              private userService: UserService,
+              private routeParams: RouteParams) {
   }
 
   ngOnInit() {
@@ -34,10 +25,15 @@ export class UserDetailComponent implements OnInit {
       let id = this.routeParams.get('id');
       this.navigated = true;
       this.userService.getUser(id)
-        .subscribe(user => this.user = user);
+        .subscribe(user => {
+          if (user._id){
+            this.user = user;
+          } else {
+            this.router.navigate(['Users']);
+          }
+        });
     } else {
-      this.navigated = false;
-      this.user = new User();
+      this.router.navigate(['Users']);
     }
   }
 
@@ -50,7 +46,16 @@ export class UserDetailComponent implements OnInit {
         },
         error => console.log(error)
       )
+  }
 
+  delete() {
+    this.userService
+      .delete(this.user)
+      .subscribe(res => {
+          this.goBack();
+        },
+        error => console.log(error)
+      )
   }
 
   goBack(savedUser:User = null) {

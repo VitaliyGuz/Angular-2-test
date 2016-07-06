@@ -1,17 +1,14 @@
 import { Component } from '@angular/core';
-import { UserService } from './user.service';
-import { UsersComponent } from './user-list.component';
+import { UserService } from './Services/user.service';
+import { UsersComponent } from './Components/user-list.component';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
-import {UserDetailComponent} from "./user-detail.component";
+import { UserDetailComponent } from "./Components/user-detail.component";
+import {LoginComponent} from "./Components/login.component";
 
 
 @Component({
   selector: 'my-app',
   template: `
-    <h1>{{title}}</h1>
-    <nav>
-      <a [routerLink]="['Users']">Users</a>
-    </nav>
     <router-outlet></router-outlet>
   `,
   directives: [
@@ -26,6 +23,11 @@ import {UserDetailComponent} from "./user-detail.component";
 
 @RouteConfig([
   {
+    path: '/login',
+    name: 'Login',
+    component: LoginComponent
+  },
+  {
     path: '/detail/:id',
     name: 'UserDetail',
     component: UserDetailComponent
@@ -38,6 +40,4 @@ import {UserDetailComponent} from "./user-detail.component";
   }
 ])
 
-export class AppComponent {
-  title = 'List of users';
-}
+export class AppComponent { }
