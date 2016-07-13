@@ -3,7 +3,8 @@ import { UserService } from './Services/user.service';
 import { UsersComponent } from './Components/user-list.component';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from '@angular/router-deprecated';
 import { UserDetailComponent } from "./Components/user-detail.component";
-import {LoginComponent} from "./Components/login.component";
+import { LoginComponent } from "./Components/login.component";
+import { MDL } from "./Directives/MDL";
 
 
 @Component({
@@ -13,7 +14,8 @@ import {LoginComponent} from "./Components/login.component";
   `,
   directives: [
     UsersComponent,
-    ROUTER_DIRECTIVES
+    ROUTER_DIRECTIVES,
+    MDL
   ],
   providers: [
     UserService,

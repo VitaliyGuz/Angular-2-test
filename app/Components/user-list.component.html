@@ -1,5 +1,11 @@
-<h1>{{title}}</h1>
-<div *ngFor="let user of users"
-     (click)="gotoDetail(user)">
-  <span> {{user.name}} </span>
-</div>
+<h2>{{title}}</h2>
+<ul *ngFor="let user of users"
+    (click)="gotoDetail(user)"
+    class='mdl-list'>
+  <li class="mdl-list__item">
+    <span class="mdl-list__item-primary-content">
+      <i class="material-icons mdl-list__item-avatar">person</i>
+      {{user.name}}
+    </span>
+  </li>
+</ul>

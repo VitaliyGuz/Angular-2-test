@@ -10,6 +10,7 @@
     'Components':                 'app/Components',
 
     '@angular':                   'node_modules/@angular',
+    '@angular2-material':         'node_modules/@angular2-material',
     'angular2-in-memory-web-api': 'node_modules/angular2-in-memory-web-api',
     'rxjs':                       'node_modules/rxjs'
   };

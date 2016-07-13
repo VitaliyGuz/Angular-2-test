@@ -1,5 +1,27 @@
-<label for="name"></label>
-<input type="text" id="name" [(ngModel)]="name">
-<label for="password"></label>
-<input type="password" id="password" [(ngModel)]="password">
-<button type="submit" (click)="onSubmit()" >login</button>
+<div mdl class="mdl-card mdl-shadow--2dp">
+  <div class="content">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input
+        class="mdl-textfield__input"
+        type="text"
+        id="name"
+        [(ngModel)]="name">
+      <label class="mdl-textfield__label" for="name">Name...</label>
+    </div>
+
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input
+        class="mdl-textfield__input"
+        type="password"
+        id="password"
+        [(ngModel)]="password">
+      <label class="mdl-textfield__label" for="password">Password...</label>
+    </div>
+
+    <button
+      type="button"
+      class="mdl-button mdl-js-button mdl-js-ripple-effect"
+      (click)="onSubmit()"> login
+    </button>
+  </div>
+</div>

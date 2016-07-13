@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router-deprecated';
-
-import {UserService} from '../Services/user.service';
+import { MDL } from '../Directives/MDL'
+import { UserService } from '../Services/user.service';
 
 @Component({
   selector: 'login',
+  directives: [MDL],
   templateUrl: 'app/Components/login.component.html',
+  styleUrls: ['app/Components/login.component.css']
 })
 export class LoginComponent {
   name: string;

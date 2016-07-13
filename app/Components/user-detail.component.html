@@ -1,18 +1,47 @@
-<div *ngIf="user">
-  <h2>{{user.name}} details!</h2>
-  <div>
-    <label>id: </label>{{user._id}}
-  </div>
-  <div>
-    <label>name: </label>
-    <input [(ngModel)]="user.name" placeholder="name"/>
-  </div>
-  <div>
-    <label>admin:
-      <input type="checkbox" [(ngModel)]="user.admin"/>
+<div mdl *ngIf="user" class="mdl-card mdl-shadow--2dp">
+
+  <div class="content">
+
+    <h2>{{user.name}} details!</h2>
+
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+      <input
+        class="mdl-textfield__input"
+        type="text"
+        id="name"
+        [(ngModel)]="user.name">
+      <label class="mdl-textfield__label" for="name">Name...</label>
+    </div>
+
+    <label
+      class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect"
+      for="admin">
+      <input
+        id="admin"
+        type="checkbox"
+        [(ngModel)]="user.admin"
+        class="mdl-checkbox__input"/>
+      <span class="mdl-checkbox__label">admin</span>
     </label>
+
+
+    <div>
+      <button
+        type="button"
+        class="mdl-button mdl-js-button mdl-js-ripple-effect"
+        (click)="goBack()"> Back
+      </button>
+      <button
+        type="button"
+        class="mdl-button mdl-js-button mdl-js-ripple-effect"
+        (click)="save()"> Save
+      </button>
+      <button
+        type="button"
+        class="mdl-button mdl-js-button mdl-js-ripple-effect"
+        (click)="delete()"> Delete
+      </button>
+    </div>
   </div>
+
 </div>
-<button (click)="goBack()">Back</button>
-<button (click)="save()">Save</button>
-<button (click)="delete()">Delete</button>

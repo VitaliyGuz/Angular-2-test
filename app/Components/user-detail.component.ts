@@ -3,10 +3,14 @@ import {User} from '../Models/user';
 import {RouteParams} from '@angular/router-deprecated';
 import {UserService} from '../Services/user.service';
 import {Router} from '@angular/router-deprecated';
+import {MDL} from '../Directives/MDL'
+
 
 @Component({
-  selector: 'my-user-detail',
+  selector: 'user-detail',
+  directives: [MDL],
   templateUrl: 'app/Components/user-detail.component.html',
+  styleUrls: ['app/Components/user-detail.component.css']
 })
 
 export class UserDetailComponent implements OnInit {

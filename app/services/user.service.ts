@@ -1,21 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { User } from '../Models/user';
-import {Observable} from '../../node_modules/rxjs/Observable';
+import { Observable } from '../../node_modules/rxjs/Observable';
 import 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class UserService {
   private usersUrl = 'https://rocky-citadel-19338.herokuapp.com/api/users';  // URL to web api
-  constructor(private http: Http) { }
+  private headers: Headers;
+  constructor(private http: Http) {
+    this.headers = new Headers();
+    this.headers.append('X-Access-Token', localStorage.getItem('auth_token'));
+    this.headers.append('Content-Type', 'application/json');
+  }
   getUsers(): Observable<User[]> {
-    return this.http.get(this.usersUrl)
+    return this.http.get(this.usersUrl, { headers: this.headers })
       .map(res => res.json());
   }
   getUser(id: string): Observable<User> {
     let url = `${this.usersUrl}/${id}`;
-    return this.http.get(url)
+    return this.http.get(url, { headers: this.headers })
       .map(res => res.json());
   }
   save(user: User): Observable<User>  {
@@ -25,11 +30,9 @@ export class UserService {
     return this.post(user);
   }
   delete(user: User) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
     let url = `${this.usersUrl}/${user._id}`;
     return this.http
-      .delete(url, headers)
+      .delete(url, { headers: this.headers })
       .map(res => res.json());
   }
 
@@ -62,19 +65,15 @@ export class UserService {
 
   // Add new User
   private post(user: User): Observable<User> {
-    let headers = new Headers({
-      'Content-Type': 'application/json'});
     return this.http
-      .post(this.usersUrl, JSON.stringify(user), {headers: headers})
+      .post(this.usersUrl, JSON.stringify(user), { headers: this.headers })
       .map(res => res.json());
   }
   // Update existing User
   private put(user: User) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
     let url = `${this.usersUrl}/${user._id}`;
     return this.http
-      .put(url, JSON.stringify(user), {headers: headers})
+      .put(url, JSON.stringify(user), { headers: this.headers })
       .map(res => res.json());
   }
 }
