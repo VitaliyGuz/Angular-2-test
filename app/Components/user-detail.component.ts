@@ -2,8 +2,9 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {User} from '../Models/user';
 import {RouteParams} from '@angular/router-deprecated';
 import {UserService} from '../Services/user.service';
-import {Router} from '@angular/router-deprecated';
-import {MDL} from '../Directives/MDL'
+import {Router, CanActivate} from '@angular/router-deprecated';
+import {MDL} from '../Directives/MDL';
+import {isLoggedIn} from '../Services/user.service';
 
 
 @Component({
@@ -12,6 +13,8 @@ import {MDL} from '../Directives/MDL'
   templateUrl: 'app/Components/user-detail.component.html',
   styleUrls: ['app/Components/user-detail.component.css']
 })
+
+@CanActivate(isLoggedIn)
 
 export class UserDetailComponent implements OnInit {
   @Input() user:User;

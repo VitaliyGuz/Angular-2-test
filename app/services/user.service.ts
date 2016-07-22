@@ -11,8 +11,11 @@ export class UserService {
   private headers: Headers;
   constructor(private http: Http) {
     this.headers = new Headers();
-    this.headers.append('X-Access-Token', localStorage.getItem('auth_token'));
-    this.headers.append('Content-Type', 'application/json');
+    this.setToken();
+  }
+  setToken(){
+    this.headers.set('X-Access-Token', localStorage.getItem('auth_token'));
+    this.headers.set('Content-Type', 'application/json');
   }
   getUsers(): Observable<User[]> {
     return this.http.get(this.usersUrl, { headers: this.headers })
@@ -50,15 +53,16 @@ export class UserService {
       .map((res) => {
         if (res.success) {
           localStorage.setItem('auth_token', res.token);
+          this.setToken();
           //this.loggedIn = true;
         }
-
         return res.success;
       });
   }
 
   logout() {
     localStorage.removeItem('auth_token');
+    this.setToken();
     //this.loggedIn = false;
   }
 
@@ -76,4 +80,8 @@ export class UserService {
       .put(url, JSON.stringify(user), { headers: this.headers })
       .map(res => res.json());
   }
+}
+
+export function isLoggedIn() {
+  return localStorage.getItem('auth_token') ? true : false;
 }

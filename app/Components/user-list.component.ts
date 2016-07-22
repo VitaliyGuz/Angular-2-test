@@ -3,7 +3,8 @@ import {Http, Jsonp} from '@angular/http';
 import {User} from '../Models/user';
 import {UserDetailComponent} from './user-detail.component';
 import {UserService} from '../Services/user.service';
-import {Router} from '@angular/router-deprecated';
+import {Router, CanActivate} from '@angular/router-deprecated';
+import {isLoggedIn} from '../Services/user.service';
 
 @Component({
   selector: 'user-list',
@@ -11,6 +12,8 @@ import {Router} from '@angular/router-deprecated';
   directives: [UserDetailComponent],
   providers: [UserService]
 })
+
+@CanActivate(isLoggedIn)
 
 export class UsersComponent implements OnInit {
   title = 'Users';

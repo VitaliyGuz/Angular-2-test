@@ -32,7 +32,8 @@ import { MDL } from "./Directives/MDL";
   {
     path: '/detail/:id',
     name: 'UserDetail',
-    component: UserDetailComponent
+    component: UserDetailComponent,
+
   },
   {
     path: '/users',
